@@ -6,7 +6,7 @@
   "scripts": {
     "start": "tsc && node build/index.js",
     "dev": "ts-node-dev ./src/index.ts",
-    "migrations": "tsnd ./src/data/migrations.ts"
+    "migrations": "tsnd ./src/migrations.ts"
   },
   "keywords": [],
   "author": "",
