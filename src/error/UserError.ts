@@ -18,6 +18,12 @@ export class PasswordNotProvided extends CustomError {
     }
 }
 
+export class IdNotProvided extends CustomError {
+    constructor() {
+        super(400, "Provide user ID.")
+    }
+}
+
 export class PasswordTooShort extends CustomError {
     constructor() {
         super(400, "Passwords must have a minimum of 6 characters.")
@@ -45,5 +51,11 @@ export class Unauthorized extends CustomError {
 export class UserNotFound extends CustomError {
     constructor() {
         super(404, "User not found.")
+    }
+}
+
+export class TokenNotProvided extends CustomError {
+    constructor() {
+        super(401, "Token not provided.")
     }
 }
