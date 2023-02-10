@@ -24,14 +24,26 @@ export class PasswordTooShort extends CustomError {
     }
 }
 
+export class InvalidPassword extends CustomError {
+    constructor() {
+        super(401, "Invalid password.")
+    }
+}
+
 export class InvalidEmail extends CustomError {
     constructor() {
         super(400, "Invalid email.")
     }
 }
 
-export class Unauthorized extends CustomError{ 
-    constructor(){
+export class Unauthorized extends CustomError {
+    constructor() {
         super(401, "User not authorized.")
+    }
+}
+
+export class UserNotFound extends CustomError {
+    constructor() {
+        super(404, "User not found.")
     }
 }
