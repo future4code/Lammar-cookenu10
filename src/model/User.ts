@@ -15,7 +15,7 @@ export class User {
     }
 }
 
-export interface createUserDTO {
+export interface CreateUserDTO {
     name: string,
     email: string,
     password: string

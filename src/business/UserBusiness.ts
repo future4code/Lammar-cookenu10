@@ -1,4 +1,4 @@
-import { createUserDTO, LoginInputDTO, User } from "../model/User"
+import { CreateUserDTO, LoginInputDTO, User } from "../model/User"
 import { CustomError } from "../error/CustomError"
 import { UserRepository } from "./UserRepository"
 import { IdGenerator } from "../services/IdGenerator"
@@ -14,7 +14,7 @@ const authenticator = new Authenticator()
 export class UserBusiness {
     constructor(private userData: UserRepository) { }
 
-    async signUp(input: createUserDTO): Promise<string> {
+    async signUp(input: CreateUserDTO): Promise<string> {
         try {
             const { name, email, password } = input
 

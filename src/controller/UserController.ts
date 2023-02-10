@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { createUserDTO, LoginInputDTO } from '../model/User'
+import { CreateUserDTO, LoginInputDTO } from '../model/User'
 import { UserBusiness } from '../business/UserBusiness'
 
 export class UserController {
@@ -9,7 +9,7 @@ export class UserController {
         try {
             const { name, email, password } = req.body
 
-            const newUser: createUserDTO = { name, email, password }
+            const newUser: CreateUserDTO = { name, email, password }
 
             const token = await this.userBusiness.signUp(newUser)
 
