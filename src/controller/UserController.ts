@@ -37,4 +37,31 @@ export class UserController {
             res.status(400).send(error.message)
         }
     };
+
+
+    public getUserProfile = async (req: Request, res: Response) => {
+        try {
+            const token = req.headers.authorization as string
+
+            const userData = await this.userBusiness.getUserProfile(token)
+
+            res.status(200).send({ id: userData.id, name: userData.name, email: userData.email })
+        } catch (error: any) {
+            res.status(400).send(error.message)
+        }
+    };
+
+
+    public getAnotherUserProfile = async (req: Request, res: Response) => {
+        try {
+            const token = req.headers.authorization as string
+            const {id} = req.params
+
+            const userData = await this.userBusiness.getAnotherUserProfile(token, id)
+
+            res.status(200).send({ id: userData.id, name: userData.name, email: userData.email })
+        } catch (error: any) {
+            res.status(400).send(error.message)
+        }
+    };
 }

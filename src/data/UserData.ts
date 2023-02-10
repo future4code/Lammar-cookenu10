@@ -21,7 +21,7 @@ export class UserData extends BaseDB implements UserRepository {
             const result = await UserData.connection(`${UserData.tableName}`)
                 .select().where(prop, data)
 
-            return result
+            return result[0]
         } catch (error: any) {
             throw new CustomError(400, error.message)
         }

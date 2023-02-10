@@ -11,3 +11,5 @@ const userController = new UserController(userBusiness)
 
 userRouter.post("/signup", (req, res) => userController.signUp(req, res))
 userRouter.post("/login", (req, res) => userController.login(req, res))
+userRouter.get("/profile", (req, res) => userController.getUserProfile(req, res))
+userRouter.get("/:id", (req, res) => userController.getAnotherUserProfile(req, res))

@@ -6,7 +6,7 @@ import { Authenticator } from "../services/Authenticator"
 import {
     EmailNotProvided, InvalidEmail, PasswordTooShort,
     NameNotProvided, PasswordNotProvided, UserNotFound,
-    InvalidPassword
+    InvalidPassword, Unauthorized, IdNotProvided
 } from "../error/UserError"
 
 const authenticator = new Authenticator()
@@ -76,10 +76,10 @@ export class UserBusiness {
             }
 
             const userFound = new User(
-                result[0].id,
-                result[0].name,
-                result[0].email,
-                result[0].password
+                result.id,
+                result.name,
+                result.email,
+                result.password
             )
 
             if (userFound.getPassword() !== password) {
@@ -89,6 +89,41 @@ export class UserBusiness {
             const token = authenticator.generateToken({ id: userFound.getId() })
 
             return token
+        } catch (error: any) {
+            throw new CustomError(400, error.message)
+        }
+    };
+
+
+    public getUserProfile = async (token: string) => {
+        try {
+            if (!token) {
+                throw new Unauthorized
+            }
+
+            const { id } = authenticator.getTokenData(token)
+
+            const { name, email } = await this.userData.findUser("id", id)
+
+            return { id, name, email }
+        } catch (error: any) {
+            throw new CustomError(400, error.message)
+        }
+    };
+
+
+    public getAnotherUserProfile = async (token: string, id: string) => {
+        try {
+            if (!token) {
+                throw new Unauthorized
+            }
+            if (!id) {
+                throw new IdNotProvided
+            }
+
+            const { name, email } = await this.userData.findUser("id", id)
+
+            return { id, name, email }
         } catch (error: any) {
             throw new CustomError(400, error.message)
         }
