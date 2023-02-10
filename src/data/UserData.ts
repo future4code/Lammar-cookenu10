@@ -15,12 +15,15 @@ export class UserData extends BaseDB implements UserRepository {
         }
     }
 
-    // async getUsers():Promise<User[]> {
-    //     try {
-    //         return await UserData.connection(UserData.tableName)
-    //         .select()
-    //     } catch (error:any) {
-    //         throw new CustomError(error.statusCode, error.message)
-    //     }
-    // }
+
+    async findUser(prop: string, data: string): Promise<any> {
+        try {
+            const result = await UserData.connection(`${UserData.tableName}`)
+                .select().where(prop, data)
+
+            return result
+        } catch (error: any) {
+            throw new CustomError(400, error.message)
+        }
+    };
 }

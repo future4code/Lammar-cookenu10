@@ -5,6 +5,14 @@ export class User {
         private email: string,
         private password: string
     ) { }
+
+    getId(){
+        return this.id
+    }
+
+    getPassword(){
+        return this.password
+    }
 }
 
 export interface createUserDTO {
@@ -13,6 +21,11 @@ export interface createUserDTO {
     password: string
 }
 
-export type AuthenticationData = {
+export interface AuthenticationData {
     id: string
+}
+
+export interface LoginInputDTO {
+    email: string,
+    password: string
 }
