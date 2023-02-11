@@ -11,3 +11,10 @@ export interface CreateRecipeDTO {
     title: string,
     description: string
 }
+
+export interface RecipeOutputDTO {
+    id:string,
+    title:string,
+    description:string,
+    createdAt:Date
+}

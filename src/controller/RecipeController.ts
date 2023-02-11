@@ -8,7 +8,6 @@ export class RecipeController {
     async createRecipe(req: Request, res: Response): Promise<void> {
         try {
             const token = req.headers.authorization as string
-
             const { title, description } = req.body
 
             const newRecipe:CreateRecipeDTO = {
@@ -20,6 +19,19 @@ export class RecipeController {
 
             res.status(201).send({ message: "New recipe added."})
         } catch (error: any) {
+            res.status(error.statusCode || 400).send(error.message || error.sqlMessage)
+        }
+    }
+
+    async getRecipe(req:Request, res:Response): Promise<void>{
+        try {
+            const token = req.headers.authorization as string
+            const {id} = req.params
+
+            const recipe = await this.recipeBusiness.getRecipe(id, token)
+
+            res.status(200).send({ recipe })
+        } catch (error:any) {
             res.status(error.statusCode || 400).send(error.message || error.sqlMessage)
         }
     }

@@ -10,3 +10,4 @@ const recipeBusiness = new RecipeBusiness(recipeData)
 const recipeController = new RecipeController(recipeBusiness)
 
 recipeRouter.post("/", (req, res) => recipeController.createRecipe(req, res))
+recipeRouter.get("/:id", (req, res) => recipeController.getRecipe(req, res))

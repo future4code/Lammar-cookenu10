@@ -14,4 +14,15 @@ export class RecipeData extends BaseDB implements RecipeRepository {
             throw new CustomError(error.statusCode, error.message)
         }
     }
+
+    async findRecipe(prop: string, data: string): Promise<any> {
+        try {
+            const result = await RecipeData.connection(`${RecipeData.tableName}`)
+                .select().where(prop, data)
+
+            return result[0]
+        } catch (error: any) {
+            throw new CustomError(400, error.message)
+        }
+    };
 }
