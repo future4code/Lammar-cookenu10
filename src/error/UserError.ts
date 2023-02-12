@@ -65,3 +65,9 @@ export class UserAlreadyFollowing extends CustomError {
         super(404, "You are already following this user.")
     }
 }
+
+export class NotFollowingUser extends CustomError {
+    constructor() {
+        super(404, "You are not following this user.")
+    }
+}
