@@ -78,4 +78,18 @@ export class UserController {
             res.status(400).send(error.message)
         }
     }
+
+
+    async unfollowUser(req: Request, res: Response) {
+        try {
+            const token = req.headers.authorization as string
+            let { userToUnfollowId } = req.body
+
+            await this.userBusiness.unfollowUser(token, userToUnfollowId)
+
+            res.status(200).send({ message: "Unfollowed successfully." })
+        } catch (error: any) {
+            res.status(400).send(error.message)
+        }
+    }
 }

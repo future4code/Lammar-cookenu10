@@ -39,7 +39,8 @@ export class UserData extends BaseDB implements UserRepository {
         }
     }
 
-    async checkFollowDupicity(followerId:string, followeeId:string):Promise<any>{
+
+    async isFollowing(followerId: string, followeeId: string): Promise<any> {
         try {
             const result = await UserData.connection.raw(`
                 SELECT * FROM ${UserData.followingTableName}
@@ -47,7 +48,18 @@ export class UserData extends BaseDB implements UserRepository {
                 AND user_to_follow_id = "${followeeId}";
             `)
             return result
-        } catch (error:any) {
+        } catch (error: any) {
+            throw new CustomError(error.statusCode, error.message)
+        }
+    }
+
+
+    async unfollowUser(unfollowId: string) {
+        try {
+            await UserData.connection(UserData.followingTableName)
+                .delete()
+                .where("id", unfollowId)
+        } catch (error: any) {
             throw new CustomError(error.statusCode, error.message)
         }
     }

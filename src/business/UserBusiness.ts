@@ -7,7 +7,7 @@ import {
     EmailNotProvided, InvalidEmail, PasswordTooShort,
     NameNotProvided, PasswordNotProvided, UserNotFound,
     InvalidPassword, Unauthorized, IdNotProvided,
-    UserAlreadyFollowing
+    UserAlreadyFollowing, NotFollowingUser
 } from "../error/UserError"
 import { Following } from "../model/Following"
 
@@ -134,12 +134,12 @@ export class UserBusiness {
 
     async followUser(token: string, userToFollowId: string) {
         try {
-            if (!userToFollowId || userToFollowId.length === 0 || !token) {
-                throw new Unauthorized
+            if (!userToFollowId || userToFollowId.length === 0) {
+                throw new IdNotProvided
             }
 
             const userId = authenticator.getTokenData(token).id
-            if (!userId) {
+            if (!userId || !token) {
                 throw new Unauthorized
             }
 
@@ -148,7 +148,7 @@ export class UserBusiness {
                 throw new UserNotFound
             }
 
-            const checkFollowDuplicity = await this.userData.checkFollowDupicity(userId, userToFollowId)
+            const checkFollowDuplicity = await this.userData.isFollowing(userId, userToFollowId)
             if (checkFollowDuplicity[0].length >= 1) {
                 throw new UserAlreadyFollowing
             }
@@ -162,6 +162,29 @@ export class UserBusiness {
             )
 
             await this.userData.followUser(followingEntry)
+        } catch (error: any) {
+            throw new CustomError(400, error.message)
+        }
+    }
+
+
+    async unfollowUser(token: string, userToUnfollowId: string) {
+        try {
+            if (!userToUnfollowId || userToUnfollowId.length === 0) {
+                throw new IdNotProvided
+            }
+
+            const userId = authenticator.getTokenData(token).id
+            if (!userId || !token) {
+                throw new Unauthorized
+            }
+
+            const isFollowing = await this.userData.isFollowing(userId, userToUnfollowId)
+            if (isFollowing[0].length < 1) {
+                throw new NotFollowingUser
+            }
+
+            await this.userData.unfollowUser(isFollowing[0][0].id)
         } catch (error: any) {
             throw new CustomError(400, error.message)
         }
