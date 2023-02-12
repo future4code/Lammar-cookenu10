@@ -21,7 +21,7 @@ export class UserController {
     }
 
 
-    public login = async (req: Request, res: Response) => {
+    async login(req: Request, res: Response) {
         try {
             const { email, password } = req.body
 
@@ -39,7 +39,7 @@ export class UserController {
     };
 
 
-    public getUserProfile = async (req: Request, res: Response) => {
+    async getUserProfile(req: Request, res: Response) {
         try {
             const token = req.headers.authorization as string
 
@@ -52,10 +52,10 @@ export class UserController {
     };
 
 
-    public getAnotherUserProfile = async (req: Request, res: Response) => {
+    async getAnotherUserProfile(req: Request, res: Response) {
         try {
             const token = req.headers.authorization as string
-            const {id} = req.params
+            const { id } = req.params
 
             const userData = await this.userBusiness.getAnotherUserProfile(token, id)
 
@@ -64,4 +64,18 @@ export class UserController {
             res.status(400).send(error.message)
         }
     };
+
+
+    async followUser(req: Request, res: Response) {
+        try {
+            const token = req.headers.authorization as string
+            let { userToFollowId } = req.body
+
+            await this.userBusiness.followUser(token, userToFollowId)
+
+            res.status(201).send({ message: "Followed successfully." })
+        } catch (error: any) {
+            res.status(400).send(error.message)
+        }
+    }
 }

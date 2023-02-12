@@ -6,10 +6,13 @@ import { Authenticator } from "../services/Authenticator"
 import {
     EmailNotProvided, InvalidEmail, PasswordTooShort,
     NameNotProvided, PasswordNotProvided, UserNotFound,
-    InvalidPassword, Unauthorized, IdNotProvided
+    InvalidPassword, Unauthorized, IdNotProvided,
+    UserAlreadyFollowing
 } from "../error/UserError"
+import { Following } from "../model/Following"
 
 const authenticator = new Authenticator()
+const idGenerator = new IdGenerator()
 
 export class UserBusiness {
     constructor(private userData: UserRepository) { }
@@ -34,7 +37,6 @@ export class UserBusiness {
                 throw new InvalidEmail
             }
 
-            const idGenerator = new IdGenerator()
             const id: string = idGenerator.generateId()
 
             const newUser = new User(
@@ -55,7 +57,7 @@ export class UserBusiness {
     }
 
 
-    public login = async (loginInput: LoginInputDTO) => {
+    async login(loginInput: LoginInputDTO) {
         try {
             const { email, password } = loginInput
 
@@ -95,7 +97,7 @@ export class UserBusiness {
     };
 
 
-    public getUserProfile = async (token: string) => {
+    async getUserProfile(token: string) {
         try {
             if (!token) {
                 throw new Unauthorized
@@ -112,7 +114,7 @@ export class UserBusiness {
     };
 
 
-    public getAnotherUserProfile = async (token: string, id: string) => {
+    async getAnotherUserProfile(token: string, id: string) {
         try {
             if (!token) {
                 throw new Unauthorized
@@ -128,4 +130,40 @@ export class UserBusiness {
             throw new CustomError(400, error.message)
         }
     };
+
+
+    async followUser(token: string, userToFollowId: string) {
+        try {
+            if (!userToFollowId || userToFollowId.length === 0 || !token) {
+                throw new Unauthorized
+            }
+
+            const userId = authenticator.getTokenData(token).id
+            if (!userId) {
+                throw new Unauthorized
+            }
+
+            const findFollowee = await this.userData.findUser("id", userToFollowId)
+            if (!findFollowee) {
+                throw new UserNotFound
+            }
+
+            const checkFollowDuplicity = await this.userData.checkFollowDupicity(userId, userToFollowId)
+            if (checkFollowDuplicity[0].length >= 1) {
+                throw new UserAlreadyFollowing
+            }
+
+            const id: string = idGenerator.generateId()
+
+            const followingEntry = new Following(
+                id,
+                userId,
+                userToFollowId
+            )
+
+            await this.userData.followUser(followingEntry)
+        } catch (error: any) {
+            throw new CustomError(400, error.message)
+        }
+    }
 }
