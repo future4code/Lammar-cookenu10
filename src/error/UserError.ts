@@ -59,3 +59,9 @@ export class TokenNotProvided extends CustomError {
         super(401, "Token not provided.")
     }
 }
+
+export class UserAlreadyFollowing extends CustomError {
+    constructor() {
+        super(404, "You are already following this user.")
+    }
+}
