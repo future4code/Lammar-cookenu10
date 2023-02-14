@@ -92,4 +92,17 @@ export class UserController {
             res.status(400).send(error.message)
         }
     }
+
+
+    async getFeed(req: Request, res: Response) {
+        try {
+            const token = req.headers.authorization as string
+
+            const recipes = await this.userBusiness.getFeed(token)
+
+            res.status(200).send({ recipes })
+        } catch (error: any) {
+            res.status(400).send(error.message)
+        }
+    }
 }

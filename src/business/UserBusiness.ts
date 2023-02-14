@@ -10,6 +10,7 @@ import {
     UserAlreadyFollowing, NotFollowingUser
 } from "../error/UserError"
 import { Following } from "../model/Following"
+import { Recipe } from "../model/Recipe"
 
 const authenticator = new Authenticator()
 const idGenerator = new IdGenerator()
@@ -185,6 +186,22 @@ export class UserBusiness {
             }
 
             await this.userData.unfollowUser(isFollowing[0][0].id)
+        } catch (error: any) {
+            throw new CustomError(400, error.message)
+        }
+    }
+
+    async getFeed(token: string): Promise<Recipe[]> {
+        try {
+            const { id } = authenticator.getTokenData(token)
+
+            if (!token || !id) {
+                throw new Unauthorized
+            }
+
+            const feed = await this.userData.getFeed(id)
+
+            return feed
         } catch (error: any) {
             throw new CustomError(400, error.message)
         }
