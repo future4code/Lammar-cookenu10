@@ -1,16 +1,19 @@
-import { CreateUserDTO, LoginInputDTO, User } from "../model/User"
 import { CustomError } from "../error/CustomError"
 import { UserRepository } from "./UserRepository"
 import { IdGenerator } from "../services/IdGenerator"
 import { Authenticator } from "../services/Authenticator"
+import { Following } from "../model/Following"
+import { Recipe } from "../model/Recipe"
+import { 
+    CreateUserDTO, LoginInputDTO,
+    User, UserOutputDTO
+} from "../model/User"
 import {
     EmailNotProvided, InvalidEmail, PasswordTooShort,
     NameNotProvided, PasswordNotProvided, UserNotFound,
     InvalidPassword, Unauthorized, IdNotProvided,
-    UserAlreadyFollowing, NotFollowingUser
+    UserAlreadyFollowing, NotFollowingUser, RoleNotProvided
 } from "../error/UserError"
-import { Following } from "../model/Following"
-import { Recipe } from "../model/Recipe"
 
 const authenticator = new Authenticator()
 const idGenerator = new IdGenerator()
@@ -20,10 +23,13 @@ export class UserBusiness {
 
     async signUp(input: CreateUserDTO): Promise<string> {
         try {
-            const { name, email, password } = input
+            const { name, role, email, password } = input
 
             if (!name) {
                 throw new NameNotProvided
+            }
+            if (!role) {
+                throw new RoleNotProvided
             }
             if (!email) {
                 throw new EmailNotProvided
@@ -43,6 +49,7 @@ export class UserBusiness {
             const newUser = new User(
                 id,
                 name,
+                role,
                 email,
                 password
             )
@@ -81,6 +88,7 @@ export class UserBusiness {
             const userFound = new User(
                 result.id,
                 result.name,
+                result.role,
                 result.email,
                 result.password
             )
@@ -106,9 +114,16 @@ export class UserBusiness {
 
             const { id } = authenticator.getTokenData(token)
 
-            const { name, email } = await this.userData.findUser("id", id)
+            const { name, role, email } = await this.userData.findUser("id", id)
 
-            return { id, name, email }
+            const userProfile:UserOutputDTO = {
+                id,
+                name,
+                role,
+                email
+            }
+
+            return userProfile
         } catch (error: any) {
             throw new CustomError(400, error.message)
         }
@@ -124,9 +139,16 @@ export class UserBusiness {
                 throw new IdNotProvided
             }
 
-            const { name, email } = await this.userData.findUser("id", id)
+            const { name, role, email } = await this.userData.findUser("id", id)
 
-            return { id, name, email }
+            const userProfile:UserOutputDTO = {
+                id,
+                name,
+                role,
+                email
+            }
+
+            return userProfile
         } catch (error: any) {
             throw new CustomError(400, error.message)
         }

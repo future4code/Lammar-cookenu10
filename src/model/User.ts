@@ -2,6 +2,7 @@ export class User {
     constructor(
         private id: string,
         private name: string,
+        private role: string,
         private email: string,
         private password: string
     ) { }
@@ -17,8 +18,16 @@ export class User {
 
 export interface CreateUserDTO {
     name: string,
+    role: string,
     email: string,
     password: string
+}
+
+export interface UserOutputDTO {
+    id: string,
+    name: string,
+    role: string,
+    email: string
 }
 
 export interface AuthenticationData {

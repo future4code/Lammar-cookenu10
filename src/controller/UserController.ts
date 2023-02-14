@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { CreateUserDTO, LoginInputDTO } from '../model/User'
+import { CreateUserDTO, LoginInputDTO, UserOutputDTO } from '../model/User'
 import { UserBusiness } from '../business/UserBusiness'
 
 export class UserController {
@@ -7,9 +7,9 @@ export class UserController {
 
     async signUp(req: Request, res: Response): Promise<void> {
         try {
-            const { name, email, password } = req.body
+            const { name, role, email, password } = req.body
 
-            const newUser: CreateUserDTO = { name, email, password }
+            const newUser: CreateUserDTO = { name, role, email, password }
 
             const token = await this.userBusiness.signUp(newUser)
 
@@ -43,9 +43,9 @@ export class UserController {
         try {
             const token = req.headers.authorization as string
 
-            const userData = await this.userBusiness.getUserProfile(token)
+            const userData: UserOutputDTO = await this.userBusiness.getUserProfile(token)
 
-            res.status(200).send({ id: userData.id, name: userData.name, email: userData.email })
+            res.status(200).send(userData)
         } catch (error: any) {
             res.status(400).send(error.message)
         }
@@ -57,9 +57,9 @@ export class UserController {
             const token = req.headers.authorization as string
             const { id } = req.params
 
-            const userData = await this.userBusiness.getAnotherUserProfile(token, id)
+            const userData: UserOutputDTO = await this.userBusiness.getAnotherUserProfile(token, id)
 
-            res.status(200).send({ id: userData.id, name: userData.name, email: userData.email })
+            res.status(200).send(userData)
         } catch (error: any) {
             res.status(400).send(error.message)
         }

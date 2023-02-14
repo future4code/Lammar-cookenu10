@@ -1,7 +1,6 @@
 import { UserRepository } from "../business/UserRepository"
 import { CustomError } from "../error/CustomError"
 import { Following } from "../model/Following"
-import { Recipe } from "../model/Recipe"
 import { User } from "../model/User"
 import { BaseDB } from "./BaseDB"
 
@@ -64,6 +63,7 @@ export class UserData extends BaseDB implements UserRepository {
             throw new CustomError(error.statusCode, error.message)
         }
     }
+
 
     async getFeed(id: string): Promise<any> {
         try {
