@@ -4,7 +4,7 @@ import { IdGenerator } from "../services/IdGenerator"
 import { Authenticator } from "../services/Authenticator"
 import { Following } from "../model/Following"
 import { Recipe } from "../model/Recipe"
-import { 
+import {
     CreateUserDTO, LoginInputDTO,
     User, UserOutputDTO
 } from "../model/User"
@@ -56,7 +56,7 @@ export class UserBusiness {
 
             await this.userData.signUp(newUser)
 
-            const token = authenticator.generateToken({ id })
+            const token = authenticator.generateToken({ id, role })
 
             return token
         } catch (error: any) {
@@ -97,7 +97,7 @@ export class UserBusiness {
                 throw new InvalidPassword()
             }
 
-            const token = authenticator.generateToken({ id: userFound.getId() })
+            const token = authenticator.generateToken({ id: userFound.getId(), role: userFound.getRole() })
 
             return token
         } catch (error: any) {
@@ -116,7 +116,7 @@ export class UserBusiness {
 
             const { name, role, email } = await this.userData.findUser("id", id)
 
-            const userProfile:UserOutputDTO = {
+            const userProfile: UserOutputDTO = {
                 id,
                 name,
                 role,
@@ -141,7 +141,7 @@ export class UserBusiness {
 
             const { name, role, email } = await this.userData.findUser("id", id)
 
-            const userProfile:UserOutputDTO = {
+            const userProfile: UserOutputDTO = {
                 id,
                 name,
                 role,

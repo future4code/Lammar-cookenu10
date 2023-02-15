@@ -7,12 +7,16 @@ export class User {
         private password: string
     ) { }
 
-    getId(){
+    getId() {
         return this.id
     }
 
-    getPassword(){
+    getPassword() {
         return this.password
+    }
+
+    getRole() {
+        return this.role
     }
 }
 
@@ -32,6 +36,7 @@ export interface UserOutputDTO {
 
 export interface AuthenticationData {
     id: string
+    role: string
 }
 
 export interface LoginInputDTO {
