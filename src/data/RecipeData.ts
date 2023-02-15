@@ -1,6 +1,6 @@
 import { RecipeRepository } from "../business/RecipeRepository"
 import { CustomError } from "../error/CustomError"
-import { Recipe } from "../model/Recipe"
+import { Recipe, RecipeInputDTO } from "../model/Recipe"
 import { BaseDB } from "./BaseDB"
 
 export class RecipeData extends BaseDB implements RecipeRepository {
@@ -15,6 +15,7 @@ export class RecipeData extends BaseDB implements RecipeRepository {
         }
     }
 
+
     async findRecipe(prop: string, data: string): Promise<any> {
         try {
             const result = await RecipeData.connection(`${RecipeData.tableName}`)
@@ -25,4 +26,17 @@ export class RecipeData extends BaseDB implements RecipeRepository {
             throw new CustomError(400, error.message)
         }
     };
+
+
+    async editRecipe(recipeId: string, recipeData: RecipeInputDTO): Promise<void> {
+        try {
+            await RecipeData.connection.raw(`
+                UPDATE ${RecipeData.tableName}
+                SET title = "${recipeData.title}", description = "${recipeData.description}"
+                WHERE id = "${recipeId}";
+            `)
+        } catch (error: any) {
+            throw new CustomError(400, error.message)
+        }
+    }
 }

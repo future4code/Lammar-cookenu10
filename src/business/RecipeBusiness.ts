@@ -1,17 +1,20 @@
 import { CustomError } from "../error/CustomError"
 import { IdGenerator } from "../services/IdGenerator"
 import { Authenticator } from "../services/Authenticator"
-import { CreateRecipeDTO, Recipe, RecipeOutputDTO } from "../model/Recipe"
 import { RecipeRepository } from "./RecipeRepository"
 import { Unauthorized } from "../error/UserError"
-import { RecipeNotFound } from "../error/RecipeError"
+import { RecipeInputDTO, Recipe, RecipeOutputDTO } from "../model/Recipe"
+import {
+    RecipeDescriptionNotProvided, RecipeIdNotProvided, RecipeNotFound,
+    RecipeNotOwned, RecipeTitleNotProvided
+} from "../error/RecipeError"
 
 const authenticator = new Authenticator()
 
 export class RecipeBusiness {
     constructor(private recipeData: RecipeRepository) { }
 
-    async createRecipe(recipe: CreateRecipeDTO, token:string){
+    async createRecipe(recipe: RecipeInputDTO, token: string) {
         try {
             const { title, description } = recipe
 
@@ -35,7 +38,7 @@ export class RecipeBusiness {
     }
 
 
-    async getRecipe(recipeId:string, token:string): Promise<RecipeOutputDTO>{
+    async getRecipe(recipeId: string, token: string): Promise<RecipeOutputDTO> {
         try {
             const payload = authenticator.getTokenData(token)
 
@@ -49,7 +52,7 @@ export class RecipeBusiness {
                 throw new RecipeNotFound
             }
 
-            const recipe:RecipeOutputDTO = {
+            const recipe: RecipeOutputDTO = {
                 id: foundRecipe.id,
                 title: foundRecipe.title,
                 description: foundRecipe.description,
@@ -57,7 +60,37 @@ export class RecipeBusiness {
             }
 
             return recipe
-        } catch (error:any) {
+        } catch (error: any) {
+            throw new CustomError(error.statusCode, error.message)
+        }
+    }
+
+
+    async editRecipe(recipeId: string, recipeData: RecipeInputDTO, token: string): Promise<void> {
+        try {
+            if (!recipeData.title) {
+                throw new RecipeTitleNotProvided
+            }
+            if (!recipeData.description) {
+                throw new RecipeDescriptionNotProvided
+            }
+            if (!token) {
+                throw new Unauthorized
+            }
+
+            const { id } = authenticator.getTokenData(token)
+
+            const foundRecipe = await this.recipeData.findRecipe("id", recipeId)
+            if (!foundRecipe) {
+                throw new RecipeNotFound
+            }
+
+            if (foundRecipe.author_id !== id) {
+                throw new RecipeNotOwned
+            }
+
+            await this.recipeData.editRecipe(recipeId, recipeData)
+        } catch (error: any) {
             throw new CustomError(error.statusCode, error.message)
         }
     }
