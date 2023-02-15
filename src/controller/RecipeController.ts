@@ -23,6 +23,7 @@ export class RecipeController {
         }
     }
 
+
     async getRecipe(req: Request, res: Response): Promise<void> {
         try {
             const token = req.headers.authorization as string
@@ -49,6 +50,21 @@ export class RecipeController {
             await this.recipeBusiness.editRecipe(recipeId, recipeData, token)
 
             res.status(200).send({ message: "Recipe updated." })
+        } catch (error: any) {
+            res.status(error.statusCode || 400).send(error.message || error.sqlMessage)
+        }
+    }
+
+
+    async deleteRecipe(req: Request, res: Response): Promise<void> {
+        try {
+            const token = req.headers.authorization as string
+
+            const { recipeId } = req.params
+
+            await this.recipeBusiness.deleteRecipe(recipeId, token)
+
+            res.status(200).send({ message: "Recipe deleted." })
         } catch (error: any) {
             res.status(error.statusCode || 400).send(error.message || error.sqlMessage)
         }

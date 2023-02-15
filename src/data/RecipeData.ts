@@ -39,4 +39,16 @@ export class RecipeData extends BaseDB implements RecipeRepository {
             throw new CustomError(400, error.message)
         }
     }
+
+
+    async deleteRecipe(recipeId: string): Promise<void> {
+        try {
+            await RecipeData.connection.raw(`
+                DELETE FROM ${RecipeData.tableName}
+                WHERE id = "${recipeId}";
+            `)
+        } catch (error: any) {
+            throw new CustomError(400, error.message)
+        }
+    }
 }

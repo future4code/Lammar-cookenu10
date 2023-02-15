@@ -78,18 +78,42 @@ export class RecipeBusiness {
                 throw new Unauthorized
             }
 
-            const { id } = authenticator.getTokenData(token)
+            const { id, role } = authenticator.getTokenData(token)
 
             const foundRecipe = await this.recipeData.findRecipe("id", recipeId)
             if (!foundRecipe) {
                 throw new RecipeNotFound
             }
 
-            if (foundRecipe.author_id !== id) {
+            if (foundRecipe.author_id !== id && role === 'normal') {
                 throw new RecipeNotOwned
             }
 
             await this.recipeData.editRecipe(recipeId, recipeData)
+        } catch (error: any) {
+            throw new CustomError(error.statusCode, error.message)
+        }
+    }
+
+
+    async deleteRecipe(recipeId: string, token: string): Promise<void> {
+        try {
+            if (!token) {
+                throw new Unauthorized
+            }
+
+            const { id, role } = authenticator.getTokenData(token)
+
+            const foundRecipe = await this.recipeData.findRecipe("id", recipeId)
+            if (!foundRecipe) {
+                throw new RecipeNotFound
+            }
+
+            if (foundRecipe.author_id !== id && role === 'normal') {
+                throw new RecipeNotOwned
+            }
+
+            await this.recipeData.deleteRecipe(recipeId)
         } catch (error: any) {
             throw new CustomError(error.statusCode, error.message)
         }
