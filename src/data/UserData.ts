@@ -7,6 +7,7 @@ import { BaseDB } from "./BaseDB"
 export class UserData extends BaseDB implements UserRepository {
     private static userTableName = "cookenu_users"
     private static followingTableName = "cookenu_following"
+    private static recipeTableName = "cookenu_recipes"
 
     async signUp(newUser: User): Promise<void> {
         try {
@@ -73,18 +74,37 @@ export class UserData extends BaseDB implements UserRepository {
                     R.creation_date as createdAt,
                     R.author_id as userId,
                     U.name as userName
-                FROM cookenu_recipes R JOIN cookenu_following F
+                FROM ${UserData.recipeTableName} R JOIN ${UserData.followingTableName} F
                 ON R.author_id = F.user_to_follow_id
-                JOIN cookenu_users U
+                JOIN ${UserData.userTableName} U
                 ON F.user_to_follow_id = U.id
                 WHERE F.user_id = "${id}"
                 ORDER BY R.creation_date;
             `)
-
             return feed[0]
         } catch (error: any) {
             throw new CustomError(error.statusCode, error.message)
         }
     }
 
+
+    async deleteAccount(id: string): Promise<void> {
+        try {
+            await UserData.connection.raw(`
+                DELETE FROM ${UserData.recipeTableName}
+                WHERE author_id = "${id}";
+
+                DELETE FROM ${UserData.followingTableName}
+                WHERE user_id = "${id}";
+
+                DELETE FROM ${UserData.followingTableName}
+                WHERE user_to_follow_id = "${id}";
+
+                DELETE FROM ${UserData.userTableName}
+                WHERE id = "${id}";
+            `)
+        } catch (error: any) {
+            throw new CustomError(error.statusCode, error.message)
+        }
+    }
 }

@@ -105,4 +105,19 @@ export class UserController {
             res.status(400).send(error.message)
         }
     }
+
+
+    async deleteAccount(req: Request, res: Response) {
+        try {
+            const token = req.headers.authorization as string
+
+            const { userId } = req.body
+
+            await this.userBusiness.deleteAccount(userId, token)
+
+            res.status(200).send({ message: "Account deleted." })
+        } catch (error: any) {
+            res.status(400).send(error.message)
+        }
+    }
 }

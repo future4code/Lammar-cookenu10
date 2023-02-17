@@ -81,7 +81,7 @@ export class UserBusiness {
 
             const result = await this.userData.findUser("email", email)
 
-            if (result.length === 0) {
+            if (!result) {
                 throw new UserNotFound()
             }
 
@@ -213,6 +213,7 @@ export class UserBusiness {
         }
     }
 
+
     async getFeed(token: string): Promise<Recipe[]> {
         try {
             const { id } = authenticator.getTokenData(token)
@@ -224,6 +225,29 @@ export class UserBusiness {
             const feed = await this.userData.getFeed(id)
 
             return feed
+        } catch (error: any) {
+            throw new CustomError(400, error.message)
+        }
+    }
+
+
+    async deleteAccount(userId: string, token: string): Promise<void> {
+        try {
+            const { role } = authenticator.getTokenData(token)
+
+            if (!token || !role || role !== 'admin') {
+                throw new Unauthorized
+            }
+            if (!userId) {
+                throw new IdNotProvided
+            }
+
+            const findUser = await this.userData.findUser('id', userId)
+            if (!findUser) {
+                throw new UserNotFound
+            }
+
+            await this.userData.deleteAccount(userId)
         } catch (error: any) {
             throw new CustomError(400, error.message)
         }

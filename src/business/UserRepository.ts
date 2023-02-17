@@ -9,4 +9,5 @@ export interface UserRepository {
     isFollowing(followerId: string, followeeId: string): Promise<any>
     unfollowUser(unfollowDTO: string): Promise<void>
     getFeed(id: string): Promise<any>
+    deleteAccount(id: string): Promise<void>
 }
