@@ -140,13 +140,16 @@ export class UserBusiness {
                 throw new IdNotProvided
             }
 
-            const { name, role, email } = await this.userData.findUser("id", id)
+            const foundUser = await this.userData.findUser("id", id)
+            if (!foundUser) {
+                throw new UserNotFound
+            }
 
             const userProfile: UserOutputDTO = {
                 id,
-                name,
-                role,
-                email
+                name: foundUser.name,
+                role: foundUser.role,
+                email: foundUser.email
             }
 
             return userProfile
