@@ -120,4 +120,19 @@ export class UserController {
             res.status(400).send(error.message)
         }
     }
+
+
+    async redefinePassword(req: Request, res: Response) {
+        try {
+            const token = req.headers.authorization as string
+
+            const { newPassword, confirmationEmail } = req.body
+
+            await this.userBusiness.redefinePassword(token, newPassword, confirmationEmail)
+
+            res.status(200).send({ message: "Password changed. A confirmation email was sent." })
+        } catch (error: any) {
+            res.status(400).send(error.message)
+        }
+    }
 }

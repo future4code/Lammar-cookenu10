@@ -14,6 +14,7 @@ import {
     InvalidPassword, Unauthorized, IdNotProvided,
     UserAlreadyFollowing, NotFollowingUser, RoleNotProvided
 } from "../error/UserError"
+import { Nodemailer } from "../services/Nodemailer"
 
 const authenticator = new Authenticator()
 const idGenerator = new IdGenerator()
@@ -248,6 +249,36 @@ export class UserBusiness {
             }
 
             await this.userData.deleteAccount(userId)
+        } catch (error: any) {
+            throw new CustomError(400, error.message)
+        }
+    }
+
+
+    async redefinePassword(token: string, newPassword: string, confirmationEmail:string): Promise<void> {
+        try {
+            const { id } = authenticator.getTokenData(token)
+
+            if (!token) {
+                throw new Unauthorized
+            }
+
+            if (!newPassword) {
+                throw new PasswordNotProvided
+            }
+            if (newPassword.length < 6) {
+                throw new PasswordTooShort
+            }
+
+            await this.userData.redefinePassword(id, newPassword)
+
+            const nodeMailer = new Nodemailer()
+            await nodeMailer.transporter.sendMail({
+                from: process.env.NODEMAILER_USER,
+                to: [confirmationEmail],
+                subject: "Password changed",
+                text: "Your password was changed sucessfully.",
+            })
         } catch (error: any) {
             throw new CustomError(400, error.message)
         }

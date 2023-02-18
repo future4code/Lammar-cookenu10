@@ -107,4 +107,17 @@ export class UserData extends BaseDB implements UserRepository {
             throw new CustomError(error.statusCode, error.message)
         }
     }
+
+
+    async redefinePassword(id: string, newPassword: string): Promise<void> {
+        try {
+            await UserData.connection.raw(`
+                UPDATE ${UserData.userTableName}
+                SET password = "${newPassword}"
+                WHERE id = "${id}";
+            `)
+        } catch (error: any) {
+            throw new CustomError(error.statusCode, error.message)
+        }
+    }
 }

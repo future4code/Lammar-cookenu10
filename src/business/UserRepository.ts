@@ -10,4 +10,5 @@ export interface UserRepository {
     unfollowUser(unfollowDTO: string): Promise<void>
     getFeed(id: string): Promise<any>
     deleteAccount(id: string): Promise<void>
+    redefinePassword(id:string, newPassword:string):Promise<void>
 }
