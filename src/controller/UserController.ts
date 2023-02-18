@@ -128,9 +128,13 @@ export class UserController {
 
             const { newPassword, confirmationEmail } = req.body
 
-            await this.userBusiness.redefinePassword(token, newPassword, confirmationEmail)
+            const confirmation = await this.userBusiness.redefinePassword(token, newPassword, confirmationEmail)
 
-            res.status(200).send({ message: "Password changed. A confirmation email was sent." })
+            if (confirmation) {
+                res.status(200).send({ message: `Password changed. ${confirmation}` })
+            } else{
+                res.status(200).send({ message: `Password changed.` })
+            }
         } catch (error: any) {
             res.status(400).send(error.message)
         }

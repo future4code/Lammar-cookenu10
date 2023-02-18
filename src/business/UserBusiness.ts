@@ -258,7 +258,7 @@ export class UserBusiness {
     }
 
 
-    async redefinePassword(token: string, newPassword: string, confirmationEmail:string): Promise<void> {
+    async redefinePassword(token: string, newPassword: string, confirmationEmail?: string): Promise<void | string> {
         try {
             const { id } = authenticator.getTokenData(token)
 
@@ -275,13 +275,17 @@ export class UserBusiness {
 
             await this.userData.redefinePassword(id, newPassword)
 
-            const nodeMailer = new Nodemailer()
-            await nodeMailer.transporter.sendMail({
-                from: process.env.NODEMAILER_USER,
-                to: [confirmationEmail],
-                subject: "Password changed",
-                text: "Your password was changed sucessfully.",
-            })
+            if (confirmationEmail) {
+                const confirmation: string = 'Confirmation email sent.'
+                const nodeMailer = new Nodemailer()
+                await nodeMailer.transporter.sendMail({
+                    from: process.env.NODEMAILER_USER,
+                    to: [confirmationEmail as string],
+                    subject: "Password changed",
+                    text: "Your password was changed sucessfully.",
+                })
+                return confirmation
+            }
         } catch (error: any) {
             throw new CustomError(400, error.message)
         }
