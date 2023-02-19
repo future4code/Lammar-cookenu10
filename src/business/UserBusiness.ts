@@ -276,7 +276,7 @@ export class UserBusiness {
             await this.userData.redefinePassword(id, newPassword)
 
             if (confirmationEmail) {
-                const confirmation: string = 'Confirmation email sent.'
+                const confirmationMsg: string = 'Confirmation email sent.'
                 const nodeMailer = new Nodemailer()
                 await nodeMailer.transporter.sendMail({
                     from: process.env.NODEMAILER_USER,
@@ -284,7 +284,7 @@ export class UserBusiness {
                     subject: "Password changed",
                     text: "Your password was changed sucessfully.",
                 })
-                return confirmation
+                return confirmationMsg
             }
         } catch (error: any) {
             throw new CustomError(400, error.message)
