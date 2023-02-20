@@ -1,0 +1,113 @@
+### Signup
+POST http://localhost:3003/user/signup
+Content-Type: application/json
+
+{
+    "name": "user5",
+    "role": "admin",
+    "email": "user5@email.com",
+    "password": "123456789"
+}
+
+
+### Login
+POST http://localhost:3003/user/login
+Content-Type: application/json
+
+{
+    "email": "user2@email.com",
+    "password": "1234567890"
+}
+
+
+### Get user profile
+GET http://localhost:3003/user/profile
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZlNTcxZjhlLTUwOTgtNGJhYy1hZjU1LTY0ZDI5YjU3ZmZlMyIsImlhdCI6MTY3NjQxNDA0NCwiZXhwIjoxNjc2NDE3NjQ0fQ.a4a_scu0kFrubuvA8Duljsy4TKTicwGCdrhIJdq8HoI
+
+
+### Get other user's profile
+GET http://localhost:3003/user/4d94cff8-57c5-4e0e-938f-a3bf7a791276
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI1MjM2MGUxLTNhMzEtNDRlOS1iZjcyLTc3YzYxOTk2ZjRhYSIsInJvbGUiOiJub3JtYWwiLCJpYXQiOjE2NzY3NTE2ODMsImV4cCI6MTY3Njc1NTI4M30.SpnFWaBcJWaatFcqfseE7U231_XMHjjkIdjcv2EhVJM
+
+
+### Create recipe
+POST http://localhost:3003/recipe
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZlNTcxZjhlLTUwOTgtNGJhYy1hZjU1LTY0ZDI5YjU3ZmZlMyIsImlhdCI6MTY3NjQxNDg0OCwiZXhwIjoxNjc2NDE4NDQ4fQ.FFuaZNkLv5tKaMD6iVoWhMAI35YIB9K1KoPigHgc20U
+
+{
+    "title": "title9",
+    "description": "description9"
+}
+
+
+### Search Recipe
+GET http://localhost:3003/recipe/a6c5fea5-00ae-4cb9-9d3b-fa6c69f1cf88
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZlNTcxZjhlLTUwOTgtNGJhYy1hZjU1LTY0ZDI5YjU3ZmZlMyIsImlhdCI6MTY3NjQxNDg0OCwiZXhwIjoxNjc2NDE4NDQ4fQ.FFuaZNkLv5tKaMD6iVoWhMAI35YIB9K1KoPigHgc20U
+
+
+### Follow user
+POST http://localhost:3003/user/follow
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI1MjM2MGUxLTNhMzEtNDRlOS1iZjcyLTc3YzYxOTk2ZjRhYSIsInJvbGUiOiJub3JtYWwiLCJpYXQiOjE2NzY3NTQ2NzgsImV4cCI6MTY3Njc1ODI3OH0.o7ur2MrvTHbPXYakMJuOYx9xho04PGYiAyz4d_o9Avg
+
+{
+    "userToFollowId": "ffd01827-a87b-42e5-826f-c9aca21c70f4"
+}
+
+
+### Unfollow user
+DELETE http://localhost:3003/user/unfollow
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI1MjM2MGUxLTNhMzEtNDRlOS1iZjcyLTc3YzYxOTk2ZjRhYSIsInJvbGUiOiJub3JtYWwiLCJpYXQiOjE2NzY3NTQ2NzgsImV4cCI6MTY3Njc1ODI3OH0.o7ur2MrvTHbPXYakMJuOYx9xho04PGYiAyz4d_o9Avg
+
+{
+    "userToUnfollowId": "ffd01827-a87b-42e5-826f-c9aca21c70f4"
+}
+
+
+### Get Feed
+GET http://localhost:3003/user/feed
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZlNTcxZjhlLTUwOTgtNGJhYy1hZjU1LTY0ZDI5YjU3ZmZlMyIsImlhdCI6MTY3NjQxNDg0OCwiZXhwIjoxNjc2NDE4NDQ4fQ.FFuaZNkLv5tKaMD6iVoWhMAI35YIB9K1KoPigHgc20U
+
+
+### Edit Recipe
+PUT http://localhost:3003/recipe/edit/75c231c4-1610-4fd7-b0f2-e49efba4bb64
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI1MjM2MGUxLTNhMzEtNDRlOS1iZjcyLTc3YzYxOTk2ZjRhYSIsInJvbGUiOiJub3JtYWwiLCJpYXQiOjE2NzY0OTU3OTAsImV4cCI6MTY3NjQ5OTM5MH0.rLXjkOyLc6OeimNAeifoxkfNsyG6s6F-kwM6shT-fj8
+
+{
+    "title": "title4 updated",
+    "description": "description4 updated"
+}
+
+
+### Delete Recipe
+DELETE http://localhost:3003/recipe/delete/594049ad-b295-4d5d-9c0c-54e4de746a10
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZlNTcxZjhlLTUwOTgtNGJhYy1hZjU1LTY0ZDI5YjU3ZmZlMyIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY3NjQ5NTQzMCwiZXhwIjoxNjc2NDk5MDMwfQ.NbQpEYU5DBNhlEQ5yBetebuEfWCeXX50dsRzLcJRzy4
+
+
+### Delete Account
+DELETE http://localhost:3003/user/delete/
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI1MjM2MGUxLTNhMzEtNDRlOS1iZjcyLTc3YzYxOTk2ZjRhYSIsInJvbGUiOiJub3JtYWwiLCJpYXQiOjE2NzY1OTQ5NzMsImV4cCI6MTY3NjU5ODU3M30.LTkc6op-i_JF3mRbbxEJaO1GBVoTePe4nCRDr-JfyqU
+
+{
+    "userId": "9553ac09-a677-4fed-9e79-b26fea4cac72"
+}
+
+
+### Redefine Password
+PUT http://localhost:3003/user/redefine-password
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI1MjM2MGUxLTNhMzEtNDRlOS1iZjcyLTc3YzYxOTk2ZjRhYSIsInJvbGUiOiJub3JtYWwiLCJpYXQiOjE2NzY3NjIwODMsImV4cCI6MTY3Njc2NTY4M30.y7kCu4croKne_KcdLcx547QrWbbCtIdu0iEi_LX316U
+
+{
+    "newPassword": "1234567896",
+    "confirmationEmail": "raphaeldavant@hotmail.com"
+}
