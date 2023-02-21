@@ -15,7 +15,7 @@
         - DB_PASSWORD=""
         - DB_DATABASE=""
     - Jason Web Token
-        - JWT_KEY (String "key" para que o JWT utilize na criação do token)
+        - JWT_KEY="" (String "key" para que o JWT utilize na criação do token)
     - Nodemailer (Opcional)
         - NODEMAILER_USER = seu@email.com (Opcional)
         - NODEMAILER_PASS = suaSenhaDeAplicativo (Opcional)
