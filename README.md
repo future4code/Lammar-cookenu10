@@ -7,7 +7,7 @@
 
 ### Como usar
 - Clone o repositório
-- Rode npm i (ou equivalente) para instalar as dependências
+- Na pasta raiz rode `npm i` (ou equivalente) para instalar as dependências
 - Crie um arquivo .env na raiz do projeto e preencha os parâmetros:
     - Dados do seu bando de dados
         - DB_HOST=""
@@ -20,7 +20,8 @@
         - NODEMAILER_USER = seu@email.com (Opcional)
         - NODEMAILER_PASS = suaSenhaDeAplicativo (Opcional)
         
-- Rode npm run migrations para criar as tabelas no banco de dados (MySQL).
+- Rode `npm run migrations` na pasta raiz para criar as tabelas no banco de dados (MySQL).
+- Rode `npm run start` na pasta raiz para iniciar o servidor
 - Teste os endpoints através do arquivo request.rest, Postman ou equivalente.
 
 ### Desenvolvimento
